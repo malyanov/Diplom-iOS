@@ -7,10 +7,12 @@
 //
 
 #import "MainViewController.h"
+#import "Chart.h"
 
 @implementation MainViewController
 @synthesize bottomBar = _bottomBar;
 @synthesize topBar = _topBar;
+@synthesize mainChart = _mainChart;
 @synthesize back=_back;
 @synthesize clock=_clock;
 @synthesize timer=_timer;
@@ -32,7 +34,8 @@
     self.clock.backgroundColor=[[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"time.png"]];
     self.bottomBar.backgroundColor=[[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"bottombar.png"]];
     self.topBar.backgroundColor=[[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"topbar.png"]];
-	// Do any additional setup after loading the view, typically from a nib.
+    Chart *chart=[[Chart alloc] initWithFrame:CGRectMake(0, 0, 320, 175)];
+    [self.mainChart addSubview:chart];
 }
 -(void)timerTask:(NSTimer*) theTimer{    
     [self.clock setText:[MainViewController getCurrentTimeStr]];    
@@ -49,6 +52,7 @@
     [self setBack:nil];
     [self setBottomBar:nil];
     [self setTopBar:nil];
+    [self setMainChart:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

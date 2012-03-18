@@ -15,5 +15,6 @@
 -(void)timerTask:NSTimer;
 @property (weak, nonatomic) IBOutlet UIView *bottomBar;
 @property (weak, nonatomic) IBOutlet UIView *topBar;
+@property (strong, nonatomic) IBOutlet UIView *mainChart;
 +(NSString*)getCurrentTimeStr;
 @end

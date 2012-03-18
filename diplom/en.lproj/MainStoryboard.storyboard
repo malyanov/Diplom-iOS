@@ -152,6 +152,7 @@
                         <outlet property="back" destination="jLP-ed-jzw" id="6wE-Di-0mv"/>
                         <outlet property="bottomBar" destination="EZf-Dw-0Jr" id="6oe-Mh-VfV"/>
                         <outlet property="clock" destination="wbN-YJ-A2R" id="M9j-TH-wgu"/>
+                        <outlet property="mainChart" destination="cpD-d1-Dl0" id="bXj-e5-7ZB"/>
                         <outlet property="topBar" destination="AoN-FS-UBV" id="78B-C7-lUB"/>
                     </connections>
                 </viewController>
@@ -585,49 +586,6 @@
         <image name="table_pressed.png" width="48" height="48"/>
         <image name="up.png" width="30" height="35"/>
     </resources>
-    <classes>
-        <class className="AlarmViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/AlarmViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="back" candidateClass="UIView"/>
-                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
-                <relationship kind="outlet" name="topBar" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="FullChartViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FullChartViewController.h"/>
-        </class>
-        <class className="MainViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MainViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="back" candidateClass="UIView"/>
-                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
-                <relationship kind="outlet" name="clock" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="topBar" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="SelectViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="back" candidateClass="UIView"/>
-                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="SettingsViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SettingsViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="back" candidateClass="UIView"/>
-                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="TableViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TableViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="back" candidateClass="UIView"/>
-                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
