@@ -23,12 +23,12 @@
     NSNumber * myNumber = [f numberFromString:str];
     return [myNumber doubleValue];
 }
--(NSArray *)readFile{
+-(NSMutableArray *)readFile{
     [data removeAllObjects];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);    
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *fileName = [NSString stringWithFormat:@"%@/data.txt", documentsDirectory];
-    NSString *fileContents = [NSString stringWithContentsOfFile:fileName];
+    NSString *fileContents = [NSString stringWithContentsOfURL:[NSURL URLWithString:fileName] encoding:NSUTF8StringEncoding error:nil];
     NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
     NSArray *splited;
     NSMutableString *dateStr=[[NSMutableString alloc] initWithString:@""];

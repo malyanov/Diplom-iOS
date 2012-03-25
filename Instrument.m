@@ -12,7 +12,8 @@
 @synthesize code, board, name;
 @synthesize exchangeId;
 @synthesize value;
-+(id)newInstrument:(NSString*)code:(NSString*)board:(NSString*)name:(int)exchangeId:(double)value{
+static int RTS=1, MICEX=2;
++(id)newInstrument:(int)exchangeId:(NSString*)board:(NSString*)code:(NSString*)name:(double)value{
     Instrument *instr=[[Instrument alloc] init];
     [instr setCode:code];
     [instr setBoard:board];

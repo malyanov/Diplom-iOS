@@ -21,6 +21,14 @@
     [q setLowValue:lowValue];
     return q;
 }
++(id)newQuotation:(double)value:(NSDate*)qdate:(QuotationType)qtype{
+    Quotation *q=[[Quotation alloc] init];
+    q.openValue=q.closeValue=q.lowValue=q.highValue=value;
+    q.dateTime=qdate;
+    q.type=qtype;
+    q.isCurrent=true;
+    return q;
+}
 -(void)changeCurrentValue:(double)value{
     if(isCurrent)
     {

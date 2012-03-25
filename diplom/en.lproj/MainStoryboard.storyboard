@@ -29,7 +29,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="sot-tB-MMs" kind="modal" id="0sc-tN-25v"/>
+                                            <action selector="settingsClick:" destination="2" eventType="touchDown" id="PvX-0c-RRZ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="nnR-7x-N73">
@@ -149,11 +149,18 @@
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="analizeChartView" destination="A3i-Rg-luG" id="FoN-j7-heW"/>
                         <outlet property="back" destination="jLP-ed-jzw" id="6wE-Di-0mv"/>
                         <outlet property="bottomBar" destination="EZf-Dw-0Jr" id="6oe-Mh-VfV"/>
+                        <outlet property="changeValue" destination="89V-Y2-LtV" id="xS3-dz-WPh"/>
                         <outlet property="clock" destination="wbN-YJ-A2R" id="M9j-TH-wgu"/>
-                        <outlet property="mainChart" destination="cpD-d1-Dl0" id="bXj-e5-7ZB"/>
+                        <outlet property="curValue" destination="yWc-LO-ky3" id="DL4-gH-QWP"/>
+                        <outlet property="exchangeImg" destination="vay-lF-RFr" id="UTD-GI-qJ2"/>
+                        <outlet property="exchangeName" destination="rGa-CD-TBz" id="lQd-aU-UUJ"/>
+                        <outlet property="instrumentName" destination="jky-BL-ka9" id="7g1-Qw-VJU"/>
+                        <outlet property="mainChartView" destination="cpD-d1-Dl0" id="Den-UR-ho5"/>
                         <outlet property="topBar" destination="AoN-FS-UBV" id="78B-C7-lUB"/>
+                        <outlet property="trend" destination="uG0-je-wJI" id="zM0-Fv-N1z"/>
                     </connections>
                 </viewController>
             </objects>
@@ -566,7 +573,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="-33" y="231"/>
+            <point key="canvasLocation" x="537" y="-347"/>
         </scene>
     </scenes>
     <resources>
@@ -586,6 +593,58 @@
         <image name="table_pressed.png" width="48" height="48"/>
         <image name="up.png" width="30" height="35"/>
     </resources>
+    <classes>
+        <class className="AlarmViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AlarmViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="back" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
+                <relationship kind="outlet" name="topBar" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="FullChartViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FullChartViewController.h"/>
+        </class>
+        <class className="MainViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MainViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="settingsClick:"/>
+                <relationship kind="outlet" name="analizeChartView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="back" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
+                <relationship kind="outlet" name="changeValue" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="clock" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="curValue" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="exchangeImg" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="exchangeName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="instrumentName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="mainChartView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="topBar" candidateClass="UIView"/>
+                <relationship kind="outlet" name="trend" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+        <class className="SelectViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="back" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="SettingsViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SettingsViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="back" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="TableViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="back" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

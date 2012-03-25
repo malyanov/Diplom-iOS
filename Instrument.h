@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-static int RTS=1, MICEX=2;
+
 @interface Instrument : NSObject 
 @property (strong) NSString *code, *board, *name;
 @property int exchangeId;
 @property double value;
 +(int)getRTS;
 +(int)getMICEX;
-+(id)newInstrument:(NSString*)code:(NSString*)board:(NSString*)name:(int)exchangeId:(double)value;
++(id)newInstrument:(int)exchangeId:(NSString*)board:(NSString*)code:(NSString*)name:(double)value;
 @end

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Quotation.h"
 #import "AnalyseChart.h"
-typedef enum {CURVES,CANDLES,BARS}Modes;
+typedef enum {CURVES=0,CANDLES,BARS}Modes;
 @interface Chart : UIView
 @property int MAX_SCALE, MIN_SCALE, SCALE_DELTA, MOVE_DELTA, PADDING;
 @property bool firstRun;
@@ -28,6 +28,16 @@ typedef enum {CURVES,CANDLES,BARS}Modes;
 @property bool isFullscreen;    
 @property (strong) AnalyseChart *analyseChart;
 @property float mScaleFactor;
-+newChart:(AnalyseChart*)analyseChart:(bool)isFullscreen;
++newChart:(AnalyseChart*)analyseChart:(bool)isFullscreen:(CGRect)frame;
 -(void)updateLastValue:(double)value;
+-(void) init:(NSMutableArray*)list;
+-(void) increaseScale;
+-(void) moveLeft;
+-(void) moveRight;
+-(void) changeViewMode:(Modes)m;
+-(void) setBidType:(QuotationType)type;
+-(void) decreaseScale;
++(NSString*) getDateString:(NSDate*)date;
+-(void) drawGrid:(CGContextRef)context;
+-(void) prepare:(int)num;
 @end

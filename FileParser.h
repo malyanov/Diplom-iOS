@@ -13,5 +13,5 @@
 @property (strong) NSMutableArray *data;
 @property (strong) NSArray *header;
 +newFileParser;
--(NSArray*)readFile;
+-(NSMutableArray*)readFile;
 @end

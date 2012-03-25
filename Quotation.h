@@ -13,7 +13,8 @@ typedef enum {Hour_Bid,Day_Bid}QuotationType;
 @property (strong) NSDate *dateTime;
 @property QuotationType type;
 @property bool isCurrent;
-+newQuotation:(double)openValue:(double)closeValue:(double)highValue:(double)lowValue;
++(id)newQuotation:(double)openValue:(double)closeValue:(double)highValue:(double)lowValue;
++(id)newQuotation:(double)value:(NSDate*)qdate:(QuotationType)qtype;
 -(void)changeCurrentValue:(double)value;
 -(void)close;
 @end

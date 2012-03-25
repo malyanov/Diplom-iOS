@@ -39,7 +39,7 @@
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context=UIGraphicsGetCurrentContext();
-    CGFloat rgba[]={1.0,0.0,0.0,1.0};
+    /*CGFloat rgba[]={1.0,0.0,0.0,1.0};
     CGColorSpaceRef space=CGColorSpaceCreateDeviceRGB();
     CGContextSetFillColorWithColor(context, CGColorCreate(space, rgba));
     CGContextFillRect(context, self.bounds);    
@@ -48,13 +48,13 @@
     CGFloat lineColor[]={0.0,1.0,0.0,1.0};
     CGContextSetStrokeColorWithColor(context, CGColorCreate(space, lineColor));
     CGContextStrokePath(context);
-    CGColorSpaceRelease(space);
+    CGColorSpaceRelease(space);*/
+    [self drawGrid:context];
 }
-+(id) newChart:(AnalyseChart*)analyseChart:(bool)isFullscreen
++(id) newChart:(AnalyseChart*)analyseChart:(bool)isFullscreen:(CGRect)frame
 {     
-    Chart *chart=[[Chart alloc] init];
+    Chart *chart=[[Chart alloc] initWithFrame:frame];
     [chart setAnalyseChart:analyseChart];
-    //setOnTouchListener(onTouch);
     CGColorSpaceRef space=CGColorSpaceCreateDeviceRGB();
     CGFloat blackRGBA[]={0.0,0.0,0.0,1.0};
     [chart setBlack:CGColorCreate(space, blackRGBA)];
@@ -64,10 +64,12 @@
     [chart setWhite:CGColorCreate(space, whiteRGBA)];
     CGFloat redRGBA[]={0.0,0.0,0.0,1.0};
     [chart setRed:CGColorCreate(space, redRGBA)];
-    CGFloat grayRGBA[]={0.0,0.0,0.0,1.0};
+    CGFloat grayRGBA[]={0.7,0.7,0.7,1.0};
     [chart setGray:CGColorCreate(space, grayRGBA)];
     [chart setIsFullscreen:isFullscreen];
     [chart setAnalyseChart:analyseChart];
+    CGColorSpaceRelease(space);
+    chart.curScaleX=chart.curScaleY=1;
     return chart;
 }
 -(void)updateLastValue:(double)value
@@ -141,44 +143,35 @@
         [self setNeedsDisplay];
     }
 }  
-/*private OnTouchListener onTouch=new OnTouchListener() {		
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        mScaleDetector.onTouchEvent(event);
-        if(event.getAction()==MotionEvent.ACTION_DOWN)
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    isDragging=true;
+    startPoint=[touch locationInView:self];
+}
+-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    if(isDragging)
+    {
+        if(abs(startPoint.x-[touch locationInView:self].x)>abs(startPoint.y-[touch locationInView:self].y))
         {
-            isDragging=true;
-            startPoint.x=(int)event.getX();
-            startPoint.y=(int)event.getY();
-            Log.i("down", "action down");
+            if(startPoint.x>[touch locationInView:self].x)
+                moveRight:;
+            else moveLeft:;
         }
-        else if(event.getAction()==MotionEvent.ACTION_MOVE)
+        else
         {
-            if(isDragging)
-            {
-                if(Math.abs(startPoint.x-(int)event.getX())>Math.abs(startPoint.y-(int)event.getY()))
-                {
-                    if(startPoint.x>event.getX())
-                        moveRight();
-                    else moveLeft();
-                }
-                else
-                {
-                    if(startPoint.y<event.getY())
-                        decreaseScale();
-                    else increaseScale();
-                }
-                Log.i("move", "action move x="+event.getX()+"; y="+event.getY());
-            }
+            if(startPoint.y<[touch locationInView:self].y)
+                decreaseScale:;
+            else increaseScale:;
         }
-        else if(event.getAction()==MotionEvent.ACTION_UP)
-        {
-            isDragging=false;
-            Log.i("up", "action up");
-        }
-        return isFullscreen;
     }
-};*/
+}
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    isDragging=false;
+}
 +(NSString*) getDateString:(NSDate*)date
 {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -186,7 +179,7 @@
     NSString *dateString = [dateFormat stringFromDate:date];    
     return  dateString;
 }
--(void) drawGrid:(CGContextRef)g
+-(void) drawGrid:(CGContextRef)context
 {      
     if(firstRun)
     {
@@ -198,13 +191,13 @@
     int vertTicks=graphWidth/curScaleX,          
     horTicks=graphHeight/curScaleY;      
     //
-    CGContextSetStrokeColorWithColor(g, black);
-    CGContextAddRect(g, CGRectMake(0, graphHeight, self.bounds.size.width, self.bounds.size.height)); 
-    CGContextAddRect(g, CGRectMake(graphWidth, 0, self.bounds.size.width, self.bounds.size.height));
+    CGContextSetStrokeColorWithColor(context, black);
+    CGContextAddRect(context, CGRectMake(0, graphHeight, self.bounds.size.width, self.bounds.size.height)); 
+    CGContextAddRect(context, CGRectMake(graphWidth, 0, self.bounds.size.width, self.bounds.size.height));
     //
     if(qList==nil||qList.count==0)
         return;
-    prepare(vertTicks+2);
+    [self prepare:vertTicks+2];
     double valuesHeight=maxValue-minValue;
     double scaleFactor=graphHeight/valuesHeight;
     double horTickValue=valuesHeight/horTicks;
@@ -214,7 +207,7 @@
     //analyseChart.setParams(horShift, curScaleX);
     //analyseChart.setInputData(points);
     int tail=0;
-    CGContextSetStrokeColorWithColor(g, gray);
+    CGContextSetStrokeColorWithColor(context, gray);
     for(int i=0;i<points.count;i++)
     {
         x=horShift+i*curScaleX;
@@ -225,15 +218,15 @@
             tail=5;
         }
         else tail=0;
-        CGContextMoveToPoint(g, x, 0);
-        CGContextAddLineToPoint(g, x, graphHeight+tail);                  
+        CGContextMoveToPoint(context, x, 0);
+        CGContextAddLineToPoint(context, x, graphHeight+tail);                  
     }    
     tail=0;
     NSString* strValue;    
     for(int j=0;j<horTicks;j++)
     {
         y=vertShift+j*curScaleY;
-        CGContextSetStrokeColorWithColor(g, white);
+        CGContextSetStrokeColorWithColor(context, white);
         if(j%10==0)
         {            
             tail=5;
@@ -243,98 +236,105 @@
             [strValue drawInRect:CGRectMake(graphWidth+(int)(0.2*PADDING), y, 50, 20) withFont:[UIFont systemFontOfSize:8]];            
         }
         else tail=0;
-        CGContextSetStrokeColorWithColor(g, gray);
-        CGContextMoveToPoint(g, 0, y);
-        CGContextAddLineToPoint(g, graphWidth+tail, y);        
+        CGContextSetStrokeColorWithColor(context, gray);
+        CGContextMoveToPoint(context, 0, y);
+        CGContextAddLineToPoint(context, graphWidth+tail, y);        
     }
+    CGContextSetStrokeColorWithColor(context, black);
     double openValue=0, closeValue=0, highValue=0, lowValue=0;      
     switch(mode)
     {
         case CURVES:              
             for(int i=0;i<points.count-1;i++)
-            {                  
-                g.drawLine(horShift+i*curScaleX, (int)Math.abs((points.get(i).closeValue-minValue)*scaleFactor-graphHeight)+vertShift, 
-                           horShift+(i+1)*curScaleX, (int)Math.abs((points.get(i+1).closeValue-minValue)*scaleFactor-graphHeight)+vertShift, black);
+            {  
+                CGContextMoveToPoint(context, horShift+i*curScaleX, fabsf(([[points objectAtIndex:i] closeValue]-minValue)*scaleFactor-graphHeight)+vertShift);
+                CGContextAddLineToPoint(context, horShift+(i+1)*curScaleX, fabsf(([[points objectAtIndex:i+1] closeValue]-minValue)*scaleFactor-graphHeight)+vertShift);                 
             }
             break;
         case CANDLES:
-            int cX,cY, cWidth, cHeight;
-            for(int i=0;i<points.size();i++)
             {
-                g.drawLine(horShift+i*curScaleX, (int)Math.abs((points.get(i).highValue-minValue)*scaleFactor-graphHeight)+vertShift, 
-                           horShift+i*curScaleX, (int)Math.abs((points.get(i).lowValue-minValue)*scaleFactor-graphHeight)+vertShift, black);
-                openValue=points.get(i).openValue;
-                closeValue=points.get(i).closeValue;
-                cX=horShift+i*curScaleX-2;
-                Paint candlePaint;
-                if(openValue>closeValue)
-                {           
-                    candlePaint=black;
-                    cY=(int)Math.ceil(Math.abs((openValue-minValue)*scaleFactor-graphHeight))+vertShift;
-                }
-                else
+                int cX,cY, cWidth, cHeight;
+                for(int i=0;i<points.count;i++)
                 {
-                    candlePaint=white;
-                    cY=(int)Math.ceil(Math.abs((closeValue-minValue)*scaleFactor-graphHeight))+vertShift;
-                }                  
-                cWidth=4;
-                cHeight=Math.abs((int)((openValue-closeValue)*scaleFactor));
-                g.drawRect(cX, cY, cX+cWidth, cY+cHeight, candlePaint);
-                black.setStyle(Style.STROKE);
-                g.drawRect(cX, cY, cX+cWidth, cY+cHeight, black);
-                black.setStyle(Style.FILL_AND_STROKE);
+                    CGContextMoveToPoint(context, horShift+i*curScaleX, fabsf(([[points objectAtIndex:i] highValue]-minValue)*scaleFactor-graphHeight)+vertShift);
+                    CGContextAddLineToPoint(context, horShift+i*curScaleX, fabsf(([[points objectAtIndex:i] lowValue]-minValue)*scaleFactor-graphHeight)+vertShift);                   
+                    openValue=[[points objectAtIndex:i] openValue];
+                    closeValue=[[points objectAtIndex:i] closeValue];
+                    cX=horShift+i*curScaleX-2;
+                    CGColorRef candlePaint;
+                    if(openValue>closeValue)
+                    {           
+                        candlePaint=black;
+                        cY=ceil(fabsf(openValue-minValue)*scaleFactor-graphHeight)+vertShift;
+                    }
+                    else
+                    {
+                        candlePaint=white;
+                        cY=ceil(fabsf(closeValue-minValue)*scaleFactor-graphHeight)+vertShift;
+                    }                  
+                    cWidth=4;
+                    cHeight=abs((openValue-closeValue)*scaleFactor);
+                    CGContextSetStrokeColorWithColor(context, candlePaint);
+                    CGContextAddRect(context, CGRectMake(cX, cY, cX+cWidth, cY+cHeight)); 
+                    CGContextSetStrokeColorWithColor(context, black);
+                    CGRect rect=CGRectMake(cX, cY, cX+cWidth, cY+cHeight);
+                    CGContextAddRect(context, rect);
+                    CGContextFillRect(context, rect);                    
+                }
             }
             break;
         case BARS:
-            int vpos=0;
-            int barLevelWidth=curScaleX/2-2;
-            for(int i=0;i<points.size();i++)
-            {                  
-                openValue=points.get(i).openValue;
-                closeValue=points.get(i).closeValue;
-                lowValue=points.get(i).lowValue;
-                highValue=points.get(i).highValue;
-                Paint barPaint;
-                if(openValue<closeValue)
-                    barPaint=blue;
-                else barPaint=black;
-                g.drawLine(horShift+i*curScaleX, (int)Math.abs((highValue-minValue)*scaleFactor-graphHeight)+vertShift, 
-                           horShift+i*curScaleX, (int)Math.abs((lowValue-minValue)*scaleFactor-graphHeight)+vertShift, barPaint);
-                vpos=(int)Math.abs((openValue-minValue)*scaleFactor-graphHeight)+vertShift;
-                g.drawLine(horShift+i*curScaleX-barLevelWidth,vpos , horShift+i*curScaleX, vpos, barPaint);
-                vpos=(int)Math.abs((closeValue-minValue)*scaleFactor-graphHeight)+vertShift;
-                g.drawLine(horShift+i*curScaleX,vpos , horShift+i*curScaleX+barLevelWidth, vpos, barPaint);
+            {
+                int vpos=0;
+                int barLevelWidth=curScaleX/2-2;
+                for(int i=0;i<points.count;i++)
+                {                  
+                    openValue=[[points objectAtIndex:i] openValue];
+                    closeValue=[[points objectAtIndex:i] closeValue];
+                    lowValue=[[points objectAtIndex:i] lowValue];
+                    highValue=[[points objectAtIndex:i] highValue];
+                    CGColorRef barPaint;
+                    if(openValue<closeValue)
+                        barPaint=blue;
+                    else barPaint=black;
+                    CGContextSetStrokeColorWithColor(context, barPaint);
+                    CGContextMoveToPoint(context, horShift+i*curScaleX, abs((highValue-minValue)*scaleFactor-graphHeight)+vertShift);
+                    CGContextAddLineToPoint(context, horShift+i*curScaleX, abs((lowValue-minValue)*scaleFactor-graphHeight)+vertShift);
+                    vpos=abs((openValue-minValue)*scaleFactor-graphHeight)+vertShift;
+                    CGContextMoveToPoint(context, horShift+i*curScaleX-barLevelWidth,vpos);
+                    CGContextAddLineToPoint(context, horShift+i*curScaleX, vpos);                    
+                    vpos=abs((closeValue-minValue)*scaleFactor-graphHeight)+vertShift;
+                    CGContextMoveToPoint(context, horShift+i*curScaleX,vpos);
+                    CGContextAddLineToPoint(context, horShift+i*curScaleX+barLevelWidth, vpos);
+                }
             }
             break;
-    }      
-    g.drawText(Settings.instrumentCode, 20, 20, red);
-    int curValue=(int)Math.abs((qList.get(qList.size()-1).closeValue-minValue)*scaleFactor-graphHeight)+vertShift;//change  ot curent      
-    g.drawLine(0, curValue, this.getWidth(), curValue, red);      
-    g.drawRect(graphWidth, curValue, this.getWidth(), curValue+15, white);      
-    g.drawText(String.valueOf(qList.get(qList.size()-1).closeValue), this.getWidth()-PADDING+5, curValue+12, red);
+    } 
+    CGContextSetStrokeColorWithColor(context, red);
+    [[Settings getInstrumentCode] drawInRect:CGRectMake(20, 20, 50, 20) withFont:[UIFont systemFontOfSize:8]];
+    int curValue=abs(([[qList objectAtIndex:qList.count-1] closeValue]-minValue)*scaleFactor-graphHeight)+vertShift;//change  ot curent      
+    CGContextMoveToPoint(context, 0, curValue);
+    CGContextAddLineToPoint(context, self.bounds.size.width, curValue);
+    CGContextSetStrokeColorWithColor(context, white);
+    CGContextAddRect(context, CGRectMake(graphWidth, curValue, self.bounds.size.width, curValue+15));
+    CGContextSetStrokeColorWithColor(context, red);
+    [[NSString stringWithFormat:@"%d",[[qList objectAtIndex:qList.count-1] closeValue]] drawInRect:CGRectMake(self.bounds.size.width-PADDING+5, curValue+12, 50, 20) withFont:[UIFont systemFontOfSize:8]];
     
 }
-private void prepare(int num){
-    Quotation q=qList.get(curPos);
-    maxValue=minValue=q.lowValue;
-    points.clear();        
-    if(curPos+num>qList.size())
-        num=qList.size()-curPos;
+-(void) prepare:(int)num
+{
+    Quotation *q=[qList objectAtIndex:curPos];
+    maxValue=minValue=[q lowValue];
+    [points removeAllObjects];        
+    if(curPos+num>qList.count)
+        num=qList.count-curPos;
     for(int i=curPos;i<curPos+num;i++)
     {
-        q=qList.get(i);
-        if(q.lowValue>maxValue) maxValue=q.lowValue;
-        if(q.lowValue<minValue) minValue=q.lowValue;
-        points.add(q);
+        q=[qList objectAtIndex:i];
+        if([q lowValue]>maxValue) maxValue=[q lowValue];
+        if([q lowValue]<minValue) minValue=[q lowValue];
+        [points addObject:q];
     }        
     //info="max="+maxValue+"; min="+minValue;        
-}        
-public void setInfo(String info){
-    this.info=info;
 }
-@Override
-protected void onDraw(Canvas canvas) {    	
-    super.onDraw(canvas);
-    drawGrid(canvas);
-} 
 @end
