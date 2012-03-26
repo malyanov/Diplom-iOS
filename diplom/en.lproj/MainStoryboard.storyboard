@@ -29,7 +29,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="settingsClick:" destination="2" eventType="touchDown" id="PvX-0c-RRZ"/>
+                                            <segue destination="sot-tB-MMs" kind="modal" identifier="toSettings" modalTransitionStyle="flipHorizontal" id="zUV-UZ-hPb"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="nnR-7x-N73">
@@ -44,7 +44,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="FAB-gT-OLb" kind="modal" id="keg-nr-esB"/>
+                                            <segue destination="FAB-gT-OLb" kind="modal" modalTransitionStyle="flipHorizontal" id="keg-nr-esB"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vIs-cr-bBg">
@@ -59,7 +59,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="Ade-mH-cov" kind="modal" id="Bmr-XH-A5k"/>
+                                            <segue destination="Ade-mH-cov" kind="modal" modalTransitionStyle="flipHorizontal" id="Bmr-XH-A5k"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rUJ-C2-Vv6">
@@ -74,7 +74,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="Kfx-Px-65D" kind="modal" id="fq0-e9-Vwa"/>
+                                            <segue destination="Kfx-Px-65D" kind="modal" modalTransitionStyle="flipHorizontal" id="fq0-e9-Vwa"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -148,6 +148,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="g53-Xb-qVg"/>
                     <connections>
                         <outlet property="analizeChartView" destination="A3i-Rg-luG" id="FoN-j7-heW"/>
                         <outlet property="back" destination="jLP-ed-jzw" id="6wE-Di-0mv"/>
@@ -227,6 +228,9 @@
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="2" kind="modal" modalTransitionStyle="flipHorizontal" id="tyd-Rl-zwR"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -294,6 +298,9 @@
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="2" kind="modal" modalTransitionStyle="flipHorizontal" id="gIX-5b-fLE"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -424,7 +431,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="6Ah-Mz-WBI" kind="modal" id="7DX-Dn-qjV"/>
+                                            <segue destination="6Ah-Mz-WBI" kind="modal" modalTransitionStyle="flipHorizontal" id="7DX-Dn-qjV"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="YDS-IC-V4r">
@@ -438,6 +445,9 @@
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="2" kind="modal" modalTransitionStyle="flipHorizontal" id="eWo-bX-UCu"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -451,7 +461,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="-437" y="231"/>
+            <point key="canvasLocation" x="-491" y="79"/>
         </scene>
         <scene sceneID="Ou2-uf-61I">
             <objects>
@@ -560,6 +570,9 @@
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="2" kind="modal" identifier="fromSettings" modalTransitionStyle="flipHorizontal" id="tO3-rV-C1o"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -567,13 +580,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="Rtg-c2-iyq"/>
                     <connections>
                         <outlet property="back" destination="VdW-Gw-yR6" id="DFB-iZ-sNk"/>
                         <outlet property="bottomBar" destination="4cR-cd-pT3" id="ehJ-Uf-jpR"/>
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="537" y="-347"/>
+            <point key="canvasLocation" x="587" y="-337"/>
         </scene>
     </scenes>
     <resources>
@@ -584,7 +598,7 @@
         <image name="chart_pressed.png" width="48" height="48"/>
         <image name="delete_normal.png" width="48" height="48"/>
         <image name="delete_pressed.png" width="48" height="48"/>
-        <image name="mmvb.png" width="39" height="24"/>
+        <image name="mmvb.png" width="16" height="16"/>
         <image name="ok_normal.png" width="48" height="48"/>
         <image name="ok_pressed.png" width="48" height="48"/>
         <image name="settings_normal.png" width="48" height="48"/>
@@ -608,7 +622,6 @@
         <class className="MainViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MainViewController.h"/>
             <relationships>
-                <relationship kind="action" name="settingsClick:"/>
                 <relationship kind="outlet" name="analizeChartView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="back" candidateClass="UIView"/>
                 <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
@@ -650,4 +663,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="tO3-rV-C1o"/>
+    </inferredMetricsTieBreakers>
 </document>

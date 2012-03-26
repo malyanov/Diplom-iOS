@@ -34,6 +34,12 @@ static NSString* serverAddress=@"http://195.128.78.52/";
     int period=HOUR_BID_ID;
     if(bidType==Day_Bid)
         period=DAY_BID_ID;
-    [HttpClient downloadFromURL:[self genQuery:marketId:emitentId:emitentCode:start:[NSDate date]:period]:@"data.txt"];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);    
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"%@/data.txt", documentsDirectory];
+    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:fileName];
+    //debug
+    if(!fileExists)
+        [HttpClient downloadFromURL:[self genQuery:marketId:emitentId:emitentCode:start:[NSDate date]:period]:@"data.txt"];
 }        
 @end

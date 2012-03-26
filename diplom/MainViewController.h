@@ -40,8 +40,6 @@
 @property (strong) NSMutableArray *quots;
 @property (strong) FileParser *parser;
 @property (strong) Instrument *curInstrument;
-//private ProgressDialog progressDlg;
-- (IBAction)settingsClick:(id)sender;
 -(void)timerTask:NSTimer;
 +(NSString*)getCurrentTimeStr;
 -(void)loadChartData;

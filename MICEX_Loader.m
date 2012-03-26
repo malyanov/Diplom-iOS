@@ -38,10 +38,12 @@ static const NSString* EmitentCodes[]={@"MSNG",@"SCOH",@"ARMD",@"DZRD",@"DZRDP",
             *instrumentCode=[args objectForKey:@"instrumentCode"];
     QuotationType bidType=[(NSNumber*)[args objectForKey:@"bidType"] intValue];
     NSString* query=[[NSString alloc] initWithFormat:@"http://www.micex.ru/iss/engines/stock/markets/shares/boards/%@/securities/%@.xml?iss.meta=off&iss.only=marketdata&marketdata.columns=LAST,TIME", board, instrumentCode];//,SECID,HIGH,LOW,OPEN,LASTCHANGE,CLOSEPRICE,SYSTIME,SEQNUM";
+    NSLog(@"%@", query);
     NSArray *rows = PerformXMLXPathQuery([NSData dataWithContentsOfURL:[NSURL URLWithString:query]], @"//row");
     id row=[rows objectAtIndex:0];
-    NSString* price=[row objectForKey:@"LAST"];
-    NSString* date=[row objectForKey:@"TIME"];
+    NSMutableDictionary *attributes=[MICEX_Loader getAttributes:row];
+    NSString* price=[attributes objectForKey:@"LAST"];
+    NSString* date=[attributes objectForKey:@"TIME"];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"HH:mm:ss"];
     NSDate* dateObj=[formatter dateFromString:date];

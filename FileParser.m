@@ -28,38 +28,44 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);    
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *fileName = [NSString stringWithFormat:@"%@/data.txt", documentsDirectory];
-    NSString *fileContents = [NSString stringWithContentsOfURL:[NSURL URLWithString:fileName] encoding:NSUTF8StringEncoding error:nil];
+    NSLog(@"Read file path:%@", fileName);
+    NSString *fileContents = [NSString stringWithContentsOfFile:fileName encoding:NSASCIIStringEncoding error:nil];
     NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
     NSArray *splited;
     NSMutableString *dateStr=[[NSMutableString alloc] initWithString:@""];
     double open=0, close=0, high=0, low=0;
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"yyyyMMddhhmmss"];
+    [df setDateFormat:@"yyyyMMddHHmmss"];
     NSDate *qdate;
     for (NSString *line in lines) {
+        NSString* l=[line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];        
         if(header==nil){
-            NSString* l=[line substringWithRange:NSMakeRange(0, [line length]-1)];
+            l=[l substringWithRange:NSMakeRange(1, [l length]-2)];
             header=[l componentsSeparatedByString:@">,<"];
             continue;
         }
-        splited=[line componentsSeparatedByString:@","];
-        for(int i=0;i<header.count;i++){
-            NSString* str=[splited objectAtIndex:i];
-            if([header objectAtIndex:i]==@"OPEN") 
-                open=[self stringToDouble:str];
-            if([header objectAtIndex:i]==@"CLOSE") 
-                close=[self stringToDouble:str];
-            if([header objectAtIndex:i]==@"HIGH") 
-                high=[self stringToDouble:str];
-            if([header objectAtIndex:i]==@"LOW") 
-                low=[self stringToDouble:str];
-            if([header objectAtIndex:i]==@"DATE") 
-                [dateStr appendString:str];
-            if([header objectAtIndex:i]==@"TIME"){
-                [dateStr appendString:str];                
-                qdate=[df dateFromString:dateStr];
+        splited=[l componentsSeparatedByString:@","];
+        if(splited.count==header.count){
+            for(int i=0;i<header.count;i++){
+                NSString* str=[splited objectAtIndex:i];                
+                NSString* head=[header objectAtIndex:i];
+                if([head isEqualToString:@"OPEN"]) 
+                    open=[self stringToDouble:str];
+                if([head isEqualToString:@"CLOSE"]) 
+                    close=[self stringToDouble:str];
+                if([head isEqualToString:@"HIGH"]) 
+                    high=[self stringToDouble:str];
+                if([head isEqualToString:@"LOW"]) 
+                    low=[self stringToDouble:str];
+                if([head isEqualToString:@"DATE"]) 
+                    [dateStr appendString:str];
+                if([head isEqualToString:@"TIME"]){
+                    [dateStr appendString:str];                
+                    qdate=[df dateFromString:dateStr];                    
+                }
             }
         }
+        dateStr=[[NSMutableString alloc] initWithString:@""];
         Quotation *quot=[Quotation newQuotation:open:close:high:low];
         [quot setDateTime:qdate];
         [data addObject:quot];

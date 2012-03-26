@@ -32,6 +32,7 @@
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
         NSString  *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, filename];
+        NSLog(@"Save file path:%@", filePath);
         [urlData writeToFile:filePath atomically:YES];
         return 1;
     }

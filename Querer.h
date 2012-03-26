@@ -15,6 +15,6 @@
 +(id)newQuerer;
 -(void)stopTimer;
 -(void)addTask:(Instrument*)instrument:(HandleBlock)handler;
--(void)timerTask;
+-(void)runTimerTask;
 -(void)removeTask:(Instrument*)instrument;
 @end

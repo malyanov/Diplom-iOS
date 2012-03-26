@@ -47,7 +47,7 @@
 		04B2508714F8E5220007BB7C /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B2506F14F8E5220007BB7C /* background.png */; };
 		04B2508F14F8E5220007BB7C /* down.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B2507714F8E5220007BB7C /* down.png */; };
 		04B2509214F8E5220007BB7C /* minus.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B2507A14F8E5220007BB7C /* minus.png */; };
-		04B2509314F8E5220007BB7C /* mmvb.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B2507B14F8E5220007BB7C /* mmvb.png */; };
+		04B2509314F8E5220007BB7C /* micex.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B2507B14F8E5220007BB7C /* micex.png */; };
 		04B2509514F8E5220007BB7C /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B2507D14F8E5220007BB7C /* plus.png */; };
 		04B2509614F8E5220007BB7C /* rts.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B2507E14F8E5220007BB7C /* rts.png */; };
 		04B2509914F8E5220007BB7C /* time.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B2508114F8E5220007BB7C /* time.png */; };
@@ -125,7 +125,7 @@
 		04B2506F14F8E5220007BB7C /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		04B2507714F8E5220007BB7C /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down.png; sourceTree = "<group>"; };
 		04B2507A14F8E5220007BB7C /* minus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = minus.png; sourceTree = "<group>"; };
-		04B2507B14F8E5220007BB7C /* mmvb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mmvb.png; sourceTree = "<group>"; };
+		04B2507B14F8E5220007BB7C /* micex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = micex.png; sourceTree = "<group>"; };
 		04B2507D14F8E5220007BB7C /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		04B2507E14F8E5220007BB7C /* rts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rts.png; sourceTree = "<group>"; };
 		04B2508114F8E5220007BB7C /* time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = time.png; sourceTree = "<group>"; };
@@ -298,7 +298,7 @@
 				04B2506F14F8E5220007BB7C /* background.png */,
 				04B2507714F8E5220007BB7C /* down.png */,
 				04B2507A14F8E5220007BB7C /* minus.png */,
-				04B2507B14F8E5220007BB7C /* mmvb.png */,
+				04B2507B14F8E5220007BB7C /* micex.png */,
 				04B2507D14F8E5220007BB7C /* plus.png */,
 				04B2507E14F8E5220007BB7C /* rts.png */,
 				04B2508114F8E5220007BB7C /* time.png */,
@@ -394,7 +394,7 @@
 				04B2508714F8E5220007BB7C /* background.png in Resources */,
 				04B2508F14F8E5220007BB7C /* down.png in Resources */,
 				04B2509214F8E5220007BB7C /* minus.png in Resources */,
-				04B2509314F8E5220007BB7C /* mmvb.png in Resources */,
+				04B2509314F8E5220007BB7C /* micex.png in Resources */,
 				04B2509514F8E5220007BB7C /* plus.png in Resources */,
 				04B2509614F8E5220007BB7C /* rts.png in Resources */,
 				04B2509914F8E5220007BB7C /* time.png in Resources */,

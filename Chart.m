@@ -28,57 +28,42 @@
 @synthesize analyseChart;
 @synthesize mScaleFactor;
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
     }
     return self;
 }
-- (void)drawRect:(CGRect)rect
-{
+- (void)drawRect:(CGRect)rect{
     CGContextRef context=UIGraphicsGetCurrentContext();
-    /*CGFloat rgba[]={1.0,0.0,0.0,1.0};
-    CGColorSpaceRef space=CGColorSpaceCreateDeviceRGB();
-    CGContextSetFillColorWithColor(context, CGColorCreate(space, rgba));
-    CGContextFillRect(context, self.bounds);    
-    CGContextMoveToPoint(context, 0, 0);
-    CGContextAddLineToPoint(context, 50, 50);
-    CGFloat lineColor[]={0.0,1.0,0.0,1.0};
-    CGContextSetStrokeColorWithColor(context, CGColorCreate(space, lineColor));
-    CGContextStrokePath(context);
-    CGColorSpaceRelease(space);*/
     [self drawGrid:context];
 }
-+(id) newChart:(AnalyseChart*)analyseChart:(bool)isFullscreen:(CGRect)frame
-{     
-    Chart *chart=[[Chart alloc] initWithFrame:frame];
-    [chart setAnalyseChart:analyseChart];
-    CGColorSpaceRef space=CGColorSpaceCreateDeviceRGB();
-    CGFloat blackRGBA[]={0.0,0.0,0.0,1.0};
-    [chart setBlack:CGColorCreate(space, blackRGBA)];
-    CGFloat blueRGBA[]={0.0,0.0,1.0,1.0};
-    [chart setBlue:CGColorCreate(space, blueRGBA)];
-    CGFloat whiteRGBA[]={1.0,1.0,1.0,1.0};
-    [chart setWhite:CGColorCreate(space, whiteRGBA)];
-    CGFloat redRGBA[]={0.0,0.0,0.0,1.0};
-    [chart setRed:CGColorCreate(space, redRGBA)];
-    CGFloat grayRGBA[]={0.7,0.7,0.7,1.0};
-    [chart setGray:CGColorCreate(space, grayRGBA)];
-    [chart setIsFullscreen:isFullscreen];
-    [chart setAnalyseChart:analyseChart];
-    CGColorSpaceRelease(space);
-    chart.curScaleX=chart.curScaleY=1;
++(id) newChart:(AnalyseChart*)analyseChart:(bool)isFullscreen:(CGRect)frame{     
+    Chart *chart=[[Chart alloc] initWithFrame:frame]; 
+    chart.black=[UIColor blackColor].CGColor;    
+    chart.blue=[UIColor blueColor].CGColor;    
+    chart.white=[UIColor whiteColor].CGColor;    
+    chart.red=[UIColor redColor].CGColor;    
+    chart.gray=[UIColor grayColor].CGColor;
+    chart.isFullscreen=isFullscreen;
+    chart.analyseChart=analyseChart;
+    chart.MAX_SCALE=60;
+    chart.MIN_SCALE=10;
+    chart.SCALE_DELTA=5;
+    chart.MOVE_DELTA=2;
+    chart.curScaleX=chart.MIN_SCALE;
+    chart.curScaleY=(int)(0.4*chart.MIN_SCALE);   
+    chart.curScaleX=chart.curScaleY=10;
+    chart.PADDING=40;
+    chart.backgroundColor=[UIColor whiteColor];
     return chart;
 }
--(void)updateLastValue:(double)value
-{
+-(void)updateLastValue:(double)value{
     [[qList objectAtIndex:[qList count]-1] setCurrentValue:value];
     [self setNeedsDisplay];
 }
--(void) init:(NSMutableArray*)list
-{
+-(void) init:(NSMutableArray*)list{
     firstRun=true;        
     curPos=0;
     maxValue=0;
@@ -94,12 +79,11 @@
     moveDownCounter=0;
     moveLeftCounter=0;
     moveRightCounter=0;        
-    isFullscreen=true;        
+    //isFullscreen=true;        
     qList=list;
     [self setNeedsDisplay];
 }    
--(void) increaseScale
-{
+-(void) increaseScale{
     if(curScaleX+SCALE_DELTA<MAX_SCALE)
     {
         curScaleX+=SCALE_DELTA;
@@ -107,16 +91,14 @@
         [self setNeedsDisplay];
     }
 }
--(void) moveLeft
-{
+-(void) moveLeft{
     if(curPos-MOVE_DELTA>=0)
     {
         curPos-=MOVE_DELTA;            
         [self setNeedsDisplay];
     }
 }
--(void) moveRight
-{
+-(void) moveRight{
     int vertTicks=(self.bounds.size.width-PADDING)/curScaleX;
     if(curPos+MOVE_DELTA+vertTicks<[qList count])
     {
@@ -124,18 +106,15 @@
         [self setNeedsDisplay];
     }
 }
--(void) changeViewMode:(Modes)m
-{
+-(void) changeViewMode:(Modes)m{
     mode=m;
     [self setNeedsDisplay];
 }
--(void) setBidType:(QuotationType)type
-{
+-(void) setBidType:(QuotationType)type{
     bid=type;
     [self setNeedsDisplay];
 }
--(void) decreaseScale
-{
+-(void) decreaseScale{
     if(curScaleX-SCALE_DELTA>MIN_SCALE)
     {
         curScaleX-=SCALE_DELTA; 
@@ -143,22 +122,20 @@
         [self setNeedsDisplay];
     }
 }  
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     UITouch *touch = [touches anyObject];
     isDragging=true;
     startPoint=[touch locationInView:self];
 }
--(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
+-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     UITouch *touch = [touches anyObject];
     if(isDragging)
     {
         if(abs(startPoint.x-[touch locationInView:self].x)>abs(startPoint.y-[touch locationInView:self].y))
         {
             if(startPoint.x>[touch locationInView:self].x)
-                moveRight:;
-            else moveLeft:;
+                [self moveRight];
+            else [self moveLeft];
         }
         else
         {
@@ -168,35 +145,33 @@
         }
     }
 }
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     isDragging=false;
 }
-+(NSString*) getDateString:(NSDate*)date
-{
++(NSString*) getDateString:(NSDate*)date{
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"dd.MM.yyyy"];
-    NSString *dateString = [dateFormat stringFromDate:date];    
+    NSString *dateString = [dateFormat stringFromDate:date];
+    NSLog(@"%@", dateString);
     return  dateString;
 }
--(void) drawGrid:(CGContextRef)context
-{      
-    if(firstRun)
-    {
+-(void) drawGrid:(CGContextRef)context{  
+    if(qList==nil||qList.count==0)
+        return;
+    if(firstRun){
         firstRun=false;
-        PADDING=(int)(0.08*self.bounds.size.width);          
+        PADDING=(int)(0.10*self.bounds.size.width);          
     }
     int graphWidth=self.bounds.size.width-PADDING;
     int graphHeight=self.bounds.size.height-PADDING;
     int vertTicks=graphWidth/curScaleX,          
     horTicks=graphHeight/curScaleY;      
     //
-    CGContextSetStrokeColorWithColor(context, black);
+    CGContextSetFillColorWithColor(context, black);
     CGContextAddRect(context, CGRectMake(0, graphHeight, self.bounds.size.width, self.bounds.size.height)); 
     CGContextAddRect(context, CGRectMake(graphWidth, 0, self.bounds.size.width, self.bounds.size.height));
+    CGContextFillPath(context);
     //
-    if(qList==nil||qList.count==0)
-        return;
     [self prepare:vertTicks+2];
     double valuesHeight=maxValue-minValue;
     double scaleFactor=graphHeight/valuesHeight;
@@ -204,49 +179,43 @@
     int horShift=vertTicks*curScaleX-graphWidth;
     int vertShift=graphHeight-horTicks*curScaleY;
     int x,y;      
-    //analyseChart.setParams(horShift, curScaleX);
-    //analyseChart.setInputData(points);
+    [analyseChart setParams:horShift:curScaleX];
+    [analyseChart setInputData:points];
     int tail=0;
+    CGContextSetFillColorWithColor(context, white);
     CGContextSetStrokeColorWithColor(context, gray);
-    for(int i=0;i<points.count;i++)
-    {
+    int margiTop=graphHeight+PADDING/4;
+    for(int i=0;i<points.count;i++){
         x=horShift+i*curScaleX;
-        if(i%(int)(MAX_SCALE/curScaleX+2)==0)
-        {
+        if(i%(int)(MAX_SCALE/curScaleX+2)==0){
             NSString* str=[Chart getDateString:[[points objectAtIndex:i] dateTime]];
-            [str drawInRect:CGRectMake(x-50, graphHeight+PADDING/2+3, 50, 20) withFont:[UIFont systemFontOfSize:8]];             
+            [str drawInRect:CGRectMake(x-3, margiTop, 50, 20) withFont:[UIFont systemFontOfSize:9]];             
             tail=5;
         }
         else tail=0;
         CGContextMoveToPoint(context, x, 0);
         CGContextAddLineToPoint(context, x, graphHeight+tail);                  
-    }    
+    }  
     tail=0;
     NSString* strValue;    
-    for(int j=0;j<horTicks;j++)
-    {
+    for(int j=0;j<horTicks;j++){
         y=vertShift+j*curScaleY;
-        CGContextSetStrokeColorWithColor(context, white);
-        if(j%10==0)
-        {            
+        if(j%10==0){            
             tail=5;
-            strValue=[NSString stringWithFormat:@"%d", maxValue-j*horTickValue];
-            if(strValue.length>7)
-                strValue=[strValue substringWithRange:NSRangeFromString(@"0,7")];
-            [strValue drawInRect:CGRectMake(graphWidth+(int)(0.2*PADDING), y, 50, 20) withFont:[UIFont systemFontOfSize:8]];            
+            strValue=[NSString stringWithFormat:@"%.2f", maxValue-j*horTickValue];
+            [strValue drawInRect:CGRectMake(graphWidth+(int)(0.15*PADDING), y, 50, 20) withFont:[UIFont systemFontOfSize:9]];            
         }
         else tail=0;
-        CGContextSetStrokeColorWithColor(context, gray);
         CGContextMoveToPoint(context, 0, y);
         CGContextAddLineToPoint(context, graphWidth+tail, y);        
-    }
+    }     
+    CGContextStrokePath(context);
+    CGContextFillPath(context);
     CGContextSetStrokeColorWithColor(context, black);
     double openValue=0, closeValue=0, highValue=0, lowValue=0;      
-    switch(mode)
-    {
+    switch(mode){
         case CURVES:              
-            for(int i=0;i<points.count-1;i++)
-            {  
+            for(int i=0;i<points.count-1;i++){  
                 CGContextMoveToPoint(context, horShift+i*curScaleX, fabsf(([[points objectAtIndex:i] closeValue]-minValue)*scaleFactor-graphHeight)+vertShift);
                 CGContextAddLineToPoint(context, horShift+(i+1)*curScaleX, fabsf(([[points objectAtIndex:i+1] closeValue]-minValue)*scaleFactor-graphHeight)+vertShift);                 
             }
@@ -262,13 +231,11 @@
                     closeValue=[[points objectAtIndex:i] closeValue];
                     cX=horShift+i*curScaleX-2;
                     CGColorRef candlePaint;
-                    if(openValue>closeValue)
-                    {           
+                    if(openValue>closeValue){           
                         candlePaint=black;
                         cY=ceil(fabsf(openValue-minValue)*scaleFactor-graphHeight)+vertShift;
                     }
-                    else
-                    {
+                    else{
                         candlePaint=white;
                         cY=ceil(fabsf(closeValue-minValue)*scaleFactor-graphHeight)+vertShift;
                     }                  
@@ -287,8 +254,7 @@
             {
                 int vpos=0;
                 int barLevelWidth=curScaleX/2-2;
-                for(int i=0;i<points.count;i++)
-                {                  
+                for(int i=0;i<points.count;i++){                  
                     openValue=[[points objectAtIndex:i] openValue];
                     closeValue=[[points objectAtIndex:i] closeValue];
                     lowValue=[[points objectAtIndex:i] lowValue];
@@ -310,31 +276,39 @@
             }
             break;
     } 
+    CGContextStrokePath(context);
+    CGContextSetFillColorWithColor(context, red);
     CGContextSetStrokeColorWithColor(context, red);
-    [[Settings getInstrumentCode] drawInRect:CGRectMake(20, 20, 50, 20) withFont:[UIFont systemFontOfSize:8]];
-    int curValue=abs(([[qList objectAtIndex:qList.count-1] closeValue]-minValue)*scaleFactor-graphHeight)+vertShift;//change  ot curent      
+    [[Settings getInstrumentCode] drawInRect:CGRectMake(8, 8, 50, 10) withFont:[UIFont systemFontOfSize:12]];
+    CGContextFillPath(context);
+    double close=[[qList objectAtIndex:qList.count-1] closeValue]; 
+    int curValue=fabs((close-minValue)*scaleFactor-graphHeight)+vertShift;//change  ot curent  
+    if(curValue>graphHeight)
+        curValue=graphHeight-1;
+    if(curValue<=0)
+        curValue=1;
     CGContextMoveToPoint(context, 0, curValue);
     CGContextAddLineToPoint(context, self.bounds.size.width, curValue);
-    CGContextSetStrokeColorWithColor(context, white);
-    CGContextAddRect(context, CGRectMake(graphWidth, curValue, self.bounds.size.width, curValue+15));
-    CGContextSetStrokeColorWithColor(context, red);
-    [[NSString stringWithFormat:@"%d",[[qList objectAtIndex:qList.count-1] closeValue]] drawInRect:CGRectMake(self.bounds.size.width-PADDING+5, curValue+12, 50, 20) withFont:[UIFont systemFontOfSize:8]];
-    
+    CGContextStrokePath(context);
+    CGContextSetFillColorWithColor(context, white);
+    CGContextAddRect(context, CGRectMake(graphWidth, curValue, self.bounds.size.width, 15));
+    CGContextFillPath(context);
+    CGContextSetFillColorWithColor(context, red);
+    [[NSString stringWithFormat:@"%.2f",[[qList objectAtIndex:qList.count-1] closeValue]] drawInRect:CGRectMake(self.bounds.size.width-PADDING+1, curValue+1, 50, 15) withFont:[UIFont systemFontOfSize:9]];
+    CGContextFillPath(context);
 }
--(void) prepare:(int)num
-{
+-(void) prepare:(int)num{
     Quotation *q=[qList objectAtIndex:curPos];
-    maxValue=minValue=[q lowValue];
+    minValue=[q lowValue];
+    maxValue=[q highValue];
     [points removeAllObjects];        
     if(curPos+num>qList.count)
         num=qList.count-curPos;
-    for(int i=curPos;i<curPos+num;i++)
-    {
+    for(int i=curPos;i<curPos+num;i++){
         q=[qList objectAtIndex:i];
-        if([q lowValue]>maxValue) maxValue=[q lowValue];
+        if([q highValue]>maxValue) maxValue=[q highValue];
         if([q lowValue]<minValue) minValue=[q lowValue];
         [points addObject:q];
-    }        
-    //info="max="+maxValue+"; min="+minValue;        
+    }       
 }
 @end

@@ -60,6 +60,7 @@ static const int SETTINGS_ACTIVITY_CODE=1;
     self.analizeGraph=[AnalyseChart newAnalyseChart:CGRectMake(0, 0, 320, 113)];
     self.chart=[Chart newChart:self.analizeGraph:false:CGRectMake(0, 0, 320, 175)];
     [self.mainChartView addSubview:chart];
+    [self.analizeChartView addSubview:analizeGraph];
     __unsafe_unretained MainViewController *vc = self;
     self.updLastQuotHandler=^(Instrument *instr){
         double value=[instr value];
@@ -94,18 +95,6 @@ static const int SETTINGS_ACTIVITY_CODE=1;
     [super viewDidUnload];
 }
 //------------------------------------Chart Data Functions-----------------------------------------
-- (IBAction)settingsClick:(id)sender {
-    NSLog(@"Settings Button was tapped");
-    SettingsViewController *settingsController = [[SettingsViewController alloc] init];
-    [settingsController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-    [self presentViewController:settingsController animated:YES completion:^{
-        NSLog(@"Settings window closed");
-        [self showLoading];
-        [self setInfo:[Settings getExchangeId]:[Settings getInstrumentCode]];
-        [self loadChartData];
-        [self.analizeGraph setMode:[Settings getAnalyseMode]];
-    }];
-}
 -(void)loadChartData{
     [self showLoading];
     int monthsNum=1;
@@ -119,7 +108,7 @@ static const int SETTINGS_ACTIVITY_CODE=1;
         if(curInstrument!=nil)
             [querer removeTask:curInstrument];
         curInstrument=[Instrument newInstrument:[Settings getExchangeId]:[Settings getBoardCode]:[Settings getInstrumentCode]:@"":0];
-        [querer addTask:curInstrument:self.updLastQuotHandler];
+        //[querer addTask:curInstrument:self.updLastQuotHandler];
         [self hideLoading];  
     };       
     if([Settings getExchangeId]==[Instrument getRTS])        
@@ -166,6 +155,15 @@ static const int SETTINGS_ACTIVITY_CODE=1;
         indicator.center = CGPointMake(progress.bounds.size.width/2, progress.bounds.size.height-45);
         [indicator startAnimating];
         [progress addSubview:indicator];
+    }
+}
+//----------------------------------Transitions Processing-------------------------------
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    NSLog(@"Segue: %@",[segue identifier]);
+    if([[segue identifier] isEqualToString:@"toSettings"]){
+        NSLog(@"Go to settings");
+        //SettingsViewController* settings=(SettingsViewController*)[segue destinationViewController];
+        
     }
 }
 -(void)hideLoading{

@@ -26,27 +26,22 @@
 +(id) newAnalyseChart:(CGRect)frame
 {     
     AnalyseChart *chart=[[AnalyseChart alloc] initWithFrame:frame];   
-    CGColorSpaceRef space=CGColorSpaceCreateDeviceRGB();
-    CGFloat blackRGBA[]={0.0,0.0,0.0,1.0};
-    [chart setBlack:CGColorCreate(space, blackRGBA)];
-    CGFloat blueRGBA[]={0.0,0.0,1.0,1.0};
-    [chart setBlue:CGColorCreate(space, blueRGBA)];
-    CGFloat whiteRGBA[]={1.0,1.0,1.0,1.0};
-    [chart setWhite:CGColorCreate(space, whiteRGBA)];
-    CGFloat redRGBA[]={0.0,0.0,0.0,1.0};
-    [chart setRed:CGColorCreate(space, redRGBA)];
-    CGFloat grayRGBA[]={0.7,0.7,0.7,1.0};
-    [chart setGray:CGColorCreate(space, grayRGBA)];
-    CGFloat greenRGBA[]={0.0,1.0,0.0,1.0};
-    [chart setGreen:CGColorCreate(space, greenRGBA)];
-    CGColorSpaceRelease(space);
+    chart.black=[UIColor blackColor].CGColor;
+    chart.blue=[UIColor blueColor].CGColor;
+    chart.white=[UIColor whiteColor].CGColor;
+    chart.red=[UIColor redColor].CGColor;
+    chart.gray=[UIColor grayColor].CGColor;
+    chart.green=[UIColor greenColor].CGColor;
+    chart.backgroundColor=[UIColor whiteColor];
     chart.PADDING=40;
     return chart;
 }
 - (void)drawRect:(CGRect)rect
 {
+    if(drawPoints.count==0)
+        return;
     CGContextRef context=UIGraphicsGetCurrentContext();
-    PADDING=(int)(0.08*self.bounds.size.width);
+    PADDING=(int)(0.1*self.bounds.size.width);
     int height=self.bounds.size.height;
     int width=self.bounds.size.width;
     double scaleFactor=height/100.0;            
@@ -65,31 +60,37 @@
         CGContextMoveToPoint(context, horShift+i*scaleX, 0);
         CGContextAddLineToPoint(context, horShift+i*scaleX, height);
     }
+    CGContextStrokePath(context);
     if(mode==RSI)
     {
         CGContextSetStrokeColorWithColor(context, blue);
         CGContextMoveToPoint(context, 0, height/2);
         CGContextAddLineToPoint(context, width, height/2);
-        CGContextSetStrokeColorWithColor(context, red);
-        [@"RSI" drawInRect:CGRectMake(10, 20, 50, 20) withFont:[UIFont systemFontOfSize:8]];   
+        CGContextStrokePath(context);
+        CGContextSetFillColorWithColor(context, red);
+        [@"RSI" drawInRect:CGRectMake(10, 10, 50, 20) withFont:[UIFont systemFontOfSize:12]];   
         CGContextSetStrokeColorWithColor(context, green);
         for(i=0;i<drawPoints.count-1;i++){
-            y1=abs((int)[drawPoints objectAtIndex:i]*scaleFactor-height);
-            y2=abs((int)[drawPoints objectAtIndex:i+1]*scaleFactor-height);
+            y1=abs([[drawPoints objectAtIndex:i] doubleValue]*scaleFactor-height);
+            y2=abs([[drawPoints objectAtIndex:i+1] doubleValue]*scaleFactor-height);
             CGContextMoveToPoint(context, horShift+i*scaleX, y1);
             CGContextAddLineToPoint(context, horShift+(i+1)*scaleX, y2);
         }
+        CGContextStrokePath(context);
+        CGContextFillPath(context);
     }
     else
     {
         i=0;  
-        CGContextSetStrokeColorWithColor(context, red);
-        [@"Stochastic" drawInRect:CGRectMake(10, 20, 50, 20) withFont:[UIFont systemFontOfSize:8]];
+        CGContextSetFillColorWithColor(context, red);
+        [@"Stochastic" drawInRect:CGRectMake(10, 20, 50, 20) withFont:[UIFont systemFontOfSize:12]];
+        CGContextFillPath(context);
         CGContextSetStrokeColorWithColor(context, blue);
         CGContextMoveToPoint(context, 0, height/2+(int)(25*scaleFactor));
         CGContextAddLineToPoint(context, width, height/2+(int)(25*scaleFactor));
         CGContextMoveToPoint(context, 0, height/2-(int)(25*scaleFactor));
-        CGContextAddLineToPoint(context, width, height/2-(int)(25*scaleFactor));        
+        CGContextAddLineToPoint(context, width, height/2-(int)(25*scaleFactor)); 
+        CGContextStrokePath(context);
         for(int i=0;i<stochasticPoints.count-1;i++) {
             StochasticItem* item1=[stochasticPoints objectAtIndex:i];
             StochasticItem* item2=[stochasticPoints objectAtIndex:i+1];
@@ -100,19 +101,23 @@
             CGContextSetStrokeColorWithColor(context, red);
             CGContextMoveToPoint(context, horShift+i*scaleX, y1);
             CGContextAddLineToPoint(context, horShift+(i+1)*scaleX, y2);
+            CGContextStrokePath(context);
             CGContextSetStrokeColorWithColor(context, blue); 
             CGContextMoveToPoint(context, horShift+i*scaleX, y3);
-            CGContextAddLineToPoint(context, horShift+(i+1)*scaleX, y4);            
+            CGContextAddLineToPoint(context, horShift+(i+1)*scaleX, y4);
+            CGContextStrokePath(context);
         }        
     }
-    CGContextSetStrokeColorWithColor(context, black);
+    CGContextSetFillColorWithColor(context, black);
     CGContextAddRect(context, CGRectMake(width-PADDING, 0, width, height));
-    CGContextSetStrokeColorWithColor(context, white);
-    [@"90" drawInRect:CGRectMake(width-PADDING+2, (int)(height*0.1)+3, 50, 20) withFont:[UIFont systemFontOfSize:8]];
-    [@"70" drawInRect:CGRectMake(width-PADDING+2, (int)(height*0.3)+3, 50, 20) withFont:[UIFont systemFontOfSize:8]];
-    [@"50" drawInRect:CGRectMake(width-PADDING+2, height/2+3, 50, 20) withFont:[UIFont systemFontOfSize:8]];
-    [@"30" drawInRect:CGRectMake(width-PADDING+2, (int)(height*0.7)+3, 50, 20) withFont:[UIFont systemFontOfSize:8]];
-    [@"10" drawInRect:CGRectMake(width-PADDING+2, (int)(height*0.9)+3, 50, 20) withFont:[UIFont systemFontOfSize:8]];    
+    CGContextFillPath(context);
+    CGContextSetFillColorWithColor(context, white);
+    [@"90" drawInRect:CGRectMake(width-PADDING+3, (int)(height*0.1)-6, 50, 20) withFont:[UIFont systemFontOfSize:10]];
+    [@"70" drawInRect:CGRectMake(width-PADDING+3, (int)(height*0.3)-6, 50, 20) withFont:[UIFont systemFontOfSize:10]];
+    [@"50" drawInRect:CGRectMake(width-PADDING+3, height/2-6, 50, 20) withFont:[UIFont systemFontOfSize:10]];
+    [@"30" drawInRect:CGRectMake(width-PADDING+3, (int)(height*0.7)-6, 50, 20) withFont:[UIFont systemFontOfSize:10]];
+    [@"10" drawInRect:CGRectMake(width-PADDING+3, (int)(height*0.9)-6, 50, 20) withFont:[UIFont systemFontOfSize:10]];
+    CGContextFillPath(context);
 }
 -(void)setParams:(int)hShift:(int)scX
 {        

@@ -13,7 +13,8 @@
 +(id)newQuerer{
     Querer *querer=[[Querer alloc] init];
     querer.tasks=[[NSMutableArray alloc] init];
-    querer.timer=[NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(timerTask:) userInfo:nil repeats:YES];
+    //bug selector problem
+    //querer.timer=[NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(runTimerTask) userInfo:nil repeats:YES];
     return querer;
 }
 -(void)stopTimer{
@@ -24,7 +25,7 @@
     InstrumentUpdateTask* task=[InstrumentUpdateTask newInstrumentUpdateTask:instrument:handler];
     [tasks addObject:task];
 }
--(void)timerTask{
+-(void)runTimerTask{
     for (int i = 0; i < tasks.count; i++) {
         InstrumentUpdateTask *task=[tasks objectAtIndex:i];
         [task run];
