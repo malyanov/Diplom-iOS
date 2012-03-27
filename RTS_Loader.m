@@ -35,14 +35,16 @@ static NSString* EmitentCodes[]={@"RTS.-RUR",@"RTS.SGMLG",@"RTS.TAGRG",@"RTS.TAG
 +(void)runCurrentValue:(NSDictionary*)args{    
     NSString *instrumentCode=[args objectForKey:@"instrumentCode"];    
     NSString* query=[[NSString alloc] initWithFormat:@"%@?code=%@", serverAddress, instrumentCode];
+    NSLog(@"Current value query:%@", query);
     NSArray *issues = PerformXMLXPathQuery([NSData dataWithContentsOfURL:[NSURL URLWithString:query]], @"//issue");    
     id issue=[issues objectAtIndex:0];
-    NSString* price=[issue objectForKey:@"trade_price"];
-    if(price==@"")
-        price=[issue objectForKey:@"best_ask"];
-    NSString* date=[issue objectForKey:@"trade_moment"];    
+    NSMutableDictionary *attributes=[RTS_Loader getAttributes:issue];
+    NSString* price=[attributes objectForKey:@"trade_price"];
+    if(price==nil)
+        price=[attributes objectForKey:@"best_ask"];
+    NSString* date=[attributes objectForKey:@"trade_moment"];    
     NSDate* dateObj;
-    if(date==@"")
+    if(date==nil)
         dateObj=[NSDate date];
     else{ 
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -50,7 +52,7 @@ static NSString* EmitentCodes[]={@"RTS.-RUR",@"RTS.SGMLG",@"RTS.TAGRG",@"RTS.TAG
         dateObj=[formatter dateFromString:date];
     }
     Quotation* q=[Quotation newQuotation:[price doubleValue]:dateObj:Hour_Bid];
-    void (^handler)(Quotation*)=[args objectForKey:@"bidType"];
+    void (^handler)(Quotation*)=[args objectForKey:@"handler"];
     handler(q);    
 }
 +(double)getCurrentValue:(NSString*)instrumentCode{		
@@ -58,9 +60,10 @@ static NSString* EmitentCodes[]={@"RTS.-RUR",@"RTS.SGMLG",@"RTS.TAGRG",@"RTS.TAG
     NSString* query=[NSString stringWithFormat:@"%@?code=%@", serverAddress, instrumentCode];
     NSArray *issues = PerformXMLXPathQuery([NSData dataWithContentsOfURL:[NSURL URLWithString:query]], @"//issue");    
     id issue=[issues objectAtIndex:0];
-    NSString* price=[issue objectForKey:@"trade_price"];
-    if(price==@"")
-        price=[issue objectForKey:@"best_ask"];
+    NSMutableDictionary *attributes=[RTS_Loader getAttributes:issue];
+    NSString* price=[attributes objectForKey:@"trade_price"];
+    if(price==nil)
+        price=[attributes objectForKey:@"best_ask"];
     return [price doubleValue];				
 }
 //--------------------------------------Help Functions-------------------------------------------------------
@@ -79,5 +82,12 @@ static NSString* EmitentCodes[]={@"RTS.-RUR",@"RTS.SGMLG",@"RTS.TAGRG",@"RTS.TAG
             return EmitentIds[i];
     }
     return 0;
+}
++(NSMutableDictionary*)getAttributes:(id)row{
+    NSArray* attributes=[row objectForKey:@"nodeAttributeArray"];
+    NSMutableDictionary* result=[[NSMutableDictionary alloc] init];
+    for(int i=0;i<attributes.count;i++)
+        [result setObject:[[attributes objectAtIndex:i] objectForKey:@"nodeContent"] forKey:[[attributes objectAtIndex:i] objectForKey:@"attributeName"]];
+    return result;
 }
 @end

@@ -28,17 +28,20 @@
 
 static const int SETTINGS_ACTIVITY_CODE=1;
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];    
+- (void)viewDidLoad{
+    [super viewDidLoad]; 
+    //debug
+    //[Settings clearSettings];
+    //
+    if(![Settings loadSettings])//first app start        
+        [Settings saveSettings];
     self.back.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"background.png"]];
     [self.clock setText:[MainViewController getCurrentTimeStr]];
     self.timer=[NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(timerTask:) userInfo:nil repeats:YES];
@@ -46,12 +49,7 @@ static const int SETTINGS_ACTIVITY_CODE=1;
     self.bottomBar.backgroundColor=[[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"bottombar.png"]];
     self.topBar.backgroundColor=[[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"topbar.png"]];
     self.parser=[FileParser newFileParser];
-    //debug
-    [Settings clear];
-    //
-    if(![Settings load])//first app start        
-        [Settings save];        
-
+   
     self.querer=[Querer newQuerer];
     [self setInfo:[Settings getExchangeId]:[Settings getInstrumentCode]];
     [self setChangeValue:0];
@@ -79,8 +77,7 @@ static const int SETTINGS_ACTIVITY_CODE=1;
     NSString *result=[format stringFromDate:[NSDate date]];
     return result;
 }
-- (void)viewDidUnload
-{
+- (void)viewDidUnload{
     [self setBack:nil];
     [self setBottomBar:nil];
     [self setTopBar:nil];
@@ -169,28 +166,19 @@ static const int SETTINGS_ACTIVITY_CODE=1;
 -(void)hideLoading{
     [progress dismissWithClickedButtonIndex:0 animated:YES];
 }
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 }
-
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
 }
-
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated{
 	[super viewWillDisappear:animated];
 }
-
-- (void)viewDidDisappear:(BOOL)animated
-{
+- (void)viewDidDisappear:(BOOL)animated{
 	[super viewDidDisappear:animated];
 }
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
     // Return YES for supported orientations
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }

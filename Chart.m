@@ -225,28 +225,31 @@
                 int cX,cY, cWidth, cHeight;
                 for(int i=0;i<points.count;i++)
                 {
+                    CGContextSetStrokeColorWithColor(context, black);
                     CGContextMoveToPoint(context, horShift+i*curScaleX, fabsf(([[points objectAtIndex:i] highValue]-minValue)*scaleFactor-graphHeight)+vertShift);
-                    CGContextAddLineToPoint(context, horShift+i*curScaleX, fabsf(([[points objectAtIndex:i] lowValue]-minValue)*scaleFactor-graphHeight)+vertShift);                   
+                    CGContextAddLineToPoint(context, horShift+i*curScaleX, fabsf(([[points objectAtIndex:i] lowValue]-minValue)*scaleFactor-graphHeight)+vertShift);
+                    CGContextStrokePath(context);
                     openValue=[[points objectAtIndex:i] openValue];
                     closeValue=[[points objectAtIndex:i] closeValue];
                     cX=horShift+i*curScaleX-2;
                     CGColorRef candlePaint;
                     if(openValue>closeValue){           
                         candlePaint=black;
-                        cY=ceil(fabsf(openValue-minValue)*scaleFactor-graphHeight)+vertShift;
+                        cY=ceil(fabsf((openValue-minValue)*scaleFactor-graphHeight))+vertShift;
                     }
                     else{
                         candlePaint=white;
-                        cY=ceil(fabsf(closeValue-minValue)*scaleFactor-graphHeight)+vertShift;
+                        cY=ceil(fabsf((closeValue-minValue)*scaleFactor-graphHeight))+vertShift;
                     }                  
                     cWidth=4;
                     cHeight=abs((openValue-closeValue)*scaleFactor);
-                    CGContextSetStrokeColorWithColor(context, candlePaint);
-                    CGContextAddRect(context, CGRectMake(cX, cY, cX+cWidth, cY+cHeight)); 
+                    CGContextSetFillColorWithColor(context, candlePaint);
+                    CGContextAddRect(context, CGRectMake(cX, cY, cWidth, cHeight)); 
+                    CGContextFillPath(context);
                     CGContextSetStrokeColorWithColor(context, black);
-                    CGRect rect=CGRectMake(cX, cY, cX+cWidth, cY+cHeight);
+                    CGRect rect=CGRectMake(cX, cY, cWidth, cHeight);
                     CGContextAddRect(context, rect);
-                    CGContextFillRect(context, rect);                    
+                    CGContextStrokePath(context);                    
                 }
             }
             break;
@@ -272,6 +275,7 @@
                     vpos=abs((closeValue-minValue)*scaleFactor-graphHeight)+vertShift;
                     CGContextMoveToPoint(context, horShift+i*curScaleX,vpos);
                     CGContextAddLineToPoint(context, horShift+i*curScaleX+barLevelWidth, vpos);
+                    CGContextStrokePath(context); 
                 }
             }
             break;

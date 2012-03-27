@@ -7,8 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Settings.h"
+#import "Instrument.h"
+#import "Quotation.h"
+#import "ComboBox.h"
 
 @interface SettingsViewController : UIViewController
+{
+    ComboBox *instrumentCombo, *analyseCombo;
+}
 @property (weak, nonatomic) IBOutlet UIView *bottomBar;
 @property (weak, nonatomic) IBOutlet UIView *back;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *exchangeSelect;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *chartModeSelect;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *periodSelect;
+-(void)loadSettings;
+-(void)saveSettings;
 @end

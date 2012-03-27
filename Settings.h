@@ -14,15 +14,18 @@
 
 @interface Settings : NSObject
 +(QuotationType) getBidType;
++(void)setBidType:(QuotationType)type;
 +(Modes) getChartMode;
++(void)setChartMode:(Modes)mode;
 +(NSString*) getInstrumentCode;
-+(NSString*) getBoardCode;
 +(void)setInstrumentCode:(NSString*)value;
++(NSString*) getBoardCode;
 +(void)setBoardCode:(NSString*)value;
 +(int)getExchangeId;
++(void)setExchangeId:(int)exchId;
 +(Mode)getAnalyseMode;
 +(void)setAnalyseMode:(Mode)mode;
-+(void)save;
-+(void)clear;
-+(BOOL)load;
++(void)saveSettings;
++(void)clearSettings;
++(BOOL)loadSettings;
 @end

@@ -19,17 +19,23 @@ static NSString *instrumentCode=@"GAZP", *boardCode=@"";
 +(QuotationType) getBidType{
     return bidType;
 }
++(void)setBidType:(QuotationType)type{
+    bidType=type;
+}
 +(Modes) getChartMode{
     return chartMode;
+}
++(void)setChartMode:(Modes)mode{
+    chartMode=mode;
 }
 +(NSString*) getInstrumentCode{
     return instrumentCode;
 }
-+(NSString*) getBoardCode{
-    return instrumentCode;
-}
 +(void)setInstrumentCode:(NSString*)value{
     instrumentCode=value;
+}
++(NSString*) getBoardCode{
+    return instrumentCode;
 }
 +(void)setBoardCode:(NSString*)value{
     boardCode=value;
@@ -37,13 +43,16 @@ static NSString *instrumentCode=@"GAZP", *boardCode=@"";
 +(int)getExchangeId{
     return exchangeId;
 }
++(void)setExchangeId:(int)exchId{
+    exchangeId=exchId;
+}
 +(Mode)getAnalyseMode{
     return analyseMode;
 }
 +(void)setAnalyseMode:(Mode)mode{
     analyseMode=mode;
 }
-+(void)clear{
++(void)clearSettings{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:@"chart_mode"];
     [defaults removeObjectForKey:@"bid_type"];
@@ -53,7 +62,7 @@ static NSString *instrumentCode=@"GAZP", *boardCode=@"";
     [defaults removeObjectForKey:@"board_code"];
     [defaults synchronize];
 }
-+(BOOL)load{
++(BOOL)loadSettings{
     exchangeId=[Instrument getMICEX];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if([defaults objectForKey:@"instrument_code"]==nil)
@@ -66,7 +75,7 @@ static NSString *instrumentCode=@"GAZP", *boardCode=@"";
     analyseMode = [[defaults objectForKey:@"analyse_mode"] intValue];
     return YES;
 }
-+(void)save{
++(void)saveSettings{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[NSNumber numberWithInt:chartMode] forKey:@"chart_mode"];
     [defaults setObject:[NSNumber numberWithInt:bidType] forKey:@"bid_type"];

@@ -20,4 +20,5 @@
 +(double)getCurrentValue:(NSString*)instrumentCode;
 +(int)getMarketId:(NSString*)instrumentCode;
 +(int)getInstrumentId:(NSString*)instrumentCode;
++(NSMutableDictionary*)getAttributes:(id)row;
 @end
