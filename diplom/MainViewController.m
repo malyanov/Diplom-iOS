@@ -38,7 +38,7 @@ static const int SETTINGS_ACTIVITY_CODE=1;
 - (void)viewDidLoad{
     [super viewDidLoad]; 
     //debug
-    //[Settings clearSettings];
+    [Settings clearSettings];
     //
     if(![Settings loadSettings])//first app start        
         [Settings saveSettings];
@@ -89,6 +89,7 @@ static const int SETTINGS_ACTIVITY_CODE=1;
     [self setExchangeName:nil];
     [self setInstrumentName:nil];
     [self setExchangeImg:nil];
+    [querer stopTimer];
     [super viewDidUnload];
 }
 //------------------------------------Chart Data Functions-----------------------------------------
@@ -105,7 +106,7 @@ static const int SETTINGS_ACTIVITY_CODE=1;
         if(curInstrument!=nil)
             [querer removeTask:curInstrument];
         curInstrument=[Instrument newInstrument:[Settings getExchangeId]:[Settings getBoardCode]:[Settings getInstrumentCode]:@"":0];
-        //[querer addTask:curInstrument:self.updLastQuotHandler];
+        [querer addTask:curInstrument:self.updLastQuotHandler];
         [self hideLoading];  
     };       
     if([Settings getExchangeId]==[Instrument getRTS])        
@@ -123,7 +124,7 @@ static const int SETTINGS_ACTIVITY_CODE=1;
         trend.image = [UIImage imageNamed:@"down.png"];
         curValue.backgroundColor=[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0];        
     }
-    curValue.text=[NSString stringWithFormat:@"%@",value];
+    curValue.text=[NSString stringWithFormat:@"%.2lf",value];
     double changeVal=0;
     if(oldChangeValue>0)
         changeVal=(value-oldChangeValue)/oldChangeValue*100.0;

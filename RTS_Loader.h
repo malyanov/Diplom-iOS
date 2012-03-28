@@ -21,4 +21,5 @@
 +(int)getMarketId:(NSString*)instrumentCode;
 +(int)getInstrumentId:(NSString*)instrumentCode;
 +(NSMutableDictionary*)getAttributes:(id)row;
++(NSMutableArray*)getEmitentCodes;
 @end

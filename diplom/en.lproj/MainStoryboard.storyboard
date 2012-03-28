@@ -520,6 +520,9 @@
                                     <segment title="РТС"/>
                                 </segments>
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="exchangeSelectionChanged:" destination="sot-tB-MMs" eventType="valueChanged" id="A1h-DD-pe4"/>
+                                </connections>
                             </segmentedControl>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Byn-8U-53N">
                                 <rect key="frame" x="31" y="188" width="266" height="30"/>
@@ -616,6 +619,61 @@
         <image name="table_pressed.png" width="48" height="48"/>
         <image name="up.png" width="30" height="35"/>
     </resources>
+    <classes>
+        <class className="AlarmViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AlarmViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="back" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
+                <relationship kind="outlet" name="topBar" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="FullChartViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FullChartViewController.h"/>
+        </class>
+        <class className="MainViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MainViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="analizeChartView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="back" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
+                <relationship kind="outlet" name="changeValue" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="clock" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="curValue" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="exchangeImg" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="exchangeName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="instrumentName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="mainChartView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="topBar" candidateClass="UIView"/>
+                <relationship kind="outlet" name="trend" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+        <class className="SelectViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="back" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="SettingsViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SettingsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="exchangeSelectionChanged:"/>
+                <relationship kind="outlet" name="back" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
+                <relationship kind="outlet" name="chartModeSelect" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="exchangeSelect" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="periodSelect" candidateClass="UISegmentedControl"/>
+            </relationships>
+        </class>
+        <class className="TableViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="back" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

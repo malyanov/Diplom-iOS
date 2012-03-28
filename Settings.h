@@ -28,4 +28,6 @@
 +(void)saveSettings;
 +(void)clearSettings;
 +(BOOL)loadSettings;
++(void)setChanged:(bool)value;
++(bool)getChanged;
 @end

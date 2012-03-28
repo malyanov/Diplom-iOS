@@ -16,6 +16,14 @@ static QuotationType bidType=Hour_Bid;
 static int exchangeId=-1;
 static Mode analyseMode=RSI;
 static NSString *instrumentCode=@"GAZP", *boardCode=@"";
+static bool changed=false;
++(void)setChanged:(bool)value{
+    changed=true;
+}
++(bool)getChanged{
+    return changed;
+}
+
 +(QuotationType) getBidType{
     return bidType;
 }
@@ -35,7 +43,7 @@ static NSString *instrumentCode=@"GAZP", *boardCode=@"";
     instrumentCode=value;
 }
 +(NSString*) getBoardCode{
-    return instrumentCode;
+    return boardCode;
 }
 +(void)setBoardCode:(NSString*)value{
     boardCode=value;
@@ -65,8 +73,10 @@ static NSString *instrumentCode=@"GAZP", *boardCode=@"";
 +(BOOL)loadSettings{
     exchangeId=[Instrument getMICEX];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if([defaults objectForKey:@"instrument_code"]==nil)
+    if([defaults objectForKey:@"instrument_code"]==nil){
+        changed=true;
         return NO;
+    }
     instrumentCode = [defaults objectForKey:@"instrument_code"];
     boardCode = [defaults objectForKey:@"board_code"];
     chartMode = [[defaults objectForKey:@"chart_mode"] intValue];

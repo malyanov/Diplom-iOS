@@ -21,4 +21,5 @@
 +(int)getInstrumentId:(NSString*)instrumentCode;
 +(void)runCurrentValue:(NSDictionary*)args;
 +(NSMutableDictionary*)getAttributes:(id)row;
++(NSMutableArray*)getEmitentCodes;
 @end

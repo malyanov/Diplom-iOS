@@ -26,16 +26,14 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     self.back.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"background.png"]];
-    self.bottomBar.backgroundColor=[[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"bottombar.png"]];
-    NSMutableArray* instrumentsArray = [[NSMutableArray alloc] init];
-    [instrumentsArray addObject:@"GAZP"];
-    [instrumentsArray addObject:@"MSNG"];
-    [instrumentsArray addObject:@"SCOH"];
-    [instrumentsArray addObject:@"ARMD"];
+    self.bottomBar.backgroundColor=[[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"bottombar.png"]]; 
+    micex=[MICEX_Loader getEmitentCodes];
+    rts=[RTS_Loader getEmitentCodes];
     
     instrumentCombo = [[ComboBox alloc] init];
-    [instrumentCombo setComboData:instrumentsArray];
-    [instrumentCombo setSelectedText:[instrumentsArray objectAtIndex:0]];
+    
+    [self loadSettings];
+    
     [self.view addSubview:instrumentCombo.view];
     instrumentCombo.view.frame = CGRectMake(90, 110, 149, 31);
     
@@ -43,13 +41,16 @@
     [analyseArray addObject:@"RSI"];
     [analyseArray addObject:@"Stochastic"];
     analyseCombo = [[ComboBox alloc] init];    
-    [analyseCombo setComboData:analyseArray];
-    [analyseCombo setSelectedText:[analyseArray objectAtIndex:0]];
+    [analyseCombo setComboData:analyseArray:[Settings getAnalyseMode]==RSI?@"RSI":@"Stochastic"];
     [self.view addSubview:analyseCombo.view];
     analyseCombo.view.frame = CGRectMake(89, 356, 149, 31);
-    
-    [self loadSettings];
 }
+- (IBAction)exchangeSelectionChanged:(id)sender {
+    if(self.exchangeSelect.selectedSegmentIndex==0)
+        [instrumentCombo setComboData:micex:[Settings getInstrumentCode]];
+    else [instrumentCombo setComboData:rts:[Settings getInstrumentCode]];
+}
+
 -(void)loadSettings{
     self.exchangeSelect.selectedSegmentIndex=([Settings getExchangeId]==[Instrument getMICEX])?0:1;
     int mode=0;
@@ -58,7 +59,10 @@
     else if([Settings getChartMode]==BARS)
         mode=2;
     self.chartModeSelect.selectedSegmentIndex=mode;
-    self.periodSelect.selectedSegmentIndex=([Settings getBidType]==Hour_Bid)?0:1;
+    self.periodSelect.selectedSegmentIndex=([Settings getBidType]==Hour_Bid)?0:1; 
+    if([Settings getExchangeId]==[Instrument getMICEX])
+        [instrumentCombo setComboData:micex:[Settings getInstrumentCode]];
+    else [instrumentCombo setComboData:rts:[Settings getInstrumentCode]];
 }
 -(void)saveSettings{
     if(self.exchangeSelect.selectedSegmentIndex==0)
@@ -79,13 +83,17 @@
     }
     if(self.periodSelect.selectedSegmentIndex==0)
         [Settings setBidType:Hour_Bid];
-    else [Settings setBidType:Day_Bid];
+    else [Settings setBidType:Day_Bid];    
+    [Settings setInstrumentCode:[instrumentCombo selectedText]];
+    [Settings setAnalyseMode:[[analyseCombo selectedText] isEqualToString:@"RSI"]?RSI:Stochastic];
     [Settings saveSettings];
     
 }
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    if([[segue identifier] isEqualToString:@"fromSettingsWithSave"])
+    if([[segue identifier] isEqualToString:@"fromSettingsWithSave"]){
         [self saveSettings];
+        [Settings setChanged:true];
+    }
 }
 - (void)viewDidUnload{
     [self setBack:nil];

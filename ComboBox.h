@@ -11,10 +11,9 @@
     UIPickerView* pickerView;
     IBOutlet UITextField* textField;
     NSMutableArray *dataArray;
+    NSString* selectedText;
 }
 
--(void) setComboData:(NSMutableArray*) data; //set the picker view items
+-(void) setComboData:(NSMutableArray*) data:(NSString*)selectedValue;
 @property (retain, nonatomic) NSString* selectedText; //the UITextField text
-- (IBAction)comboClicked:(id)sender;
-
 @end

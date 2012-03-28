@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Quotation.h"
 #import "HttpClient.h"
+#import "Settings.h"
 
 @interface HistoryLoader : NSObject
 +(id)newHistoryLoader;

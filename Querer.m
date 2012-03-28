@@ -14,7 +14,7 @@
     Querer *querer=[[Querer alloc] init];
     querer.tasks=[[NSMutableArray alloc] init];
     //bug selector problem
-    //querer.timer=[NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(runTimerTask) userInfo:nil repeats:YES];
+    querer.timer=[NSTimer scheduledTimerWithTimeInterval:10.0 target:querer selector:@selector(runTimerTask) userInfo:nil repeats:YES];
     return querer;
 }
 -(void)stopTimer{

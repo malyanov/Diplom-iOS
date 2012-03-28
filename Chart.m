@@ -60,7 +60,7 @@
     return chart;
 }
 -(void)updateLastValue:(double)value{
-    [[qList objectAtIndex:[qList count]-1] setCurrentValue:value];
+    [[qList objectAtIndex:[qList count]-1] setCloseValue:value];
     [self setNeedsDisplay];
 }
 -(void) init:(NSMutableArray*)list{

@@ -28,6 +28,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    textField.text = selectedText;
 }
 
 - (void)viewDidUnload
@@ -67,9 +68,10 @@
 //-- ComboBox
 
 
--(void) setComboData:(NSMutableArray*) data
-{
-    dataArray = data;    
+-(void) setComboData:(NSMutableArray*) data:(NSString*)selectedValue{
+    dataArray = data;
+    textField.text = selectedValue;
+    selectedText = selectedValue;
 }
 
 
@@ -94,7 +96,7 @@
     UIBarButtonItem *flexibleSpaceLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
     
-    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Готово"
                                                                    style:UIBarButtonItemStyleDone target:self
                                                                   action:@selector(doneClicked:)];
     
