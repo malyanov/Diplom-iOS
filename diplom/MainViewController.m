@@ -59,6 +59,7 @@ static const int SETTINGS_ACTIVITY_CODE=1;
     self.chart=[Chart newChart:self.analizeGraph:false:CGRectMake(0, 0, 320, 175)];
     [self.mainChartView addSubview:chart];
     [self.analizeChartView addSubview:analizeGraph];
+    analizeGraph.mode=[Settings getAnalyseMode];
     __unsafe_unretained MainViewController *vc = self;
     self.updLastQuotHandler=^(Instrument *instr){
         double value=[instr value];

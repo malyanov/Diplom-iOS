@@ -16,7 +16,7 @@ static QuotationType bidType=Hour_Bid;
 static int exchangeId=-1;
 static Mode analyseMode=RSI;
 static NSString *instrumentCode=@"GAZP", *boardCode=@"";
-static bool changed=false;
+static bool changed=false, bollingerBands=false, ema=false;
 +(void)setChanged:(bool)value{
     changed=true;
 }
@@ -60,6 +60,18 @@ static bool changed=false;
 +(void)setAnalyseMode:(Mode)mode{
     analyseMode=mode;
 }
++(bool)getBollingerBands{
+    return bollingerBands;
+}
++(void)setBollingerBands:(bool)value{
+    bollingerBands=value;
+}
++(bool)getEMA{
+    return ema;
+}
++(void)setEMA:(bool)value{
+    ema=value;
+}
 +(void)clearSettings{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:@"chart_mode"];
@@ -68,6 +80,8 @@ static bool changed=false;
     [defaults removeObjectForKey:@"analyse_mode"];
     [defaults removeObjectForKey:@"instrument_code"];
     [defaults removeObjectForKey:@"board_code"];
+    [defaults removeObjectForKey:@"bollinger_bands"];
+    [defaults removeObjectForKey:@"ema"];
     [defaults synchronize];
 }
 +(BOOL)loadSettings{
@@ -83,6 +97,8 @@ static bool changed=false;
     bidType = [[defaults objectForKey:@"bid_type"] intValue];
     exchangeId = [[defaults objectForKey:@"exchange_id"] intValue];
     analyseMode = [[defaults objectForKey:@"analyse_mode"] intValue];
+    bollingerBands = [[defaults objectForKey:@"bollinger_bands"] boolValue];
+    ema = [[defaults objectForKey:@"ema"] boolValue];
     return YES;
 }
 +(void)saveSettings{
@@ -93,6 +109,8 @@ static bool changed=false;
     [defaults setObject:[NSNumber numberWithInt:analyseMode] forKey:@"analyse_mode"];
     [defaults setObject:instrumentCode forKey:@"instrument_code"];
     [defaults setObject:boardCode forKey:@"board_code"];
+    [defaults setObject:[NSNumber numberWithBool:bollingerBands] forKey:@"bollinger_bands"];
+    [defaults setObject:[NSNumber numberWithBool:ema] forKey:@"ema"];
     [defaults synchronize];
 }
 @end

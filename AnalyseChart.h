@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "Quotation.h"
-typedef enum{RSI=0, Stochastic}Mode;
+#import "Analiser.h"
+typedef enum{RSI=0, Stochastic, Momentum}Mode;
 @interface AnalyseChart : UIView
-@property (strong) NSMutableArray *drawPoints;    
-@property (strong) NSMutableArray *stochasticPoints;
+@property (strong) NSMutableArray *drawPoints;
 @property int scaleX, horShift;
 @property Mode mode;
 @property int PADDING;
@@ -19,8 +19,7 @@ typedef enum{RSI=0, Stochastic}Mode;
 +(id) newAnalyseChart:(CGRect)frame;
 -(void)setParams:(int)hShift:(int)scX;
 -(void)setInputData:(NSMutableArray*)quotes;
--(NSMutableArray*)RSI:(NSMutableArray*)quotes;
--(NSMutableArray*) Stochastic:(NSMutableArray*)quotes;
--(double) getMinClose:(NSArray*)values;
--(double) getMaxClose:(NSArray*)values;
+-(void)drawRSI:(CGContextRef)context:(double)scaleFactor;
+-(void)drawStochastic:(CGContextRef)context:(double)scaleFactor;
+-(void)drawMomentum:(CGContextRef)context;
 @end

@@ -20,7 +20,7 @@ typedef enum {CURVES=0,CANDLES,BARS}Modes;
 @property (strong) NSString *info;    
 @property Modes mode;
 @property QuotationType bid;
-@property CGColorRef white, gray, blue, black, red;  
+@property CGColorRef white, gray, blue, black, red, green;  
 //drag flags
 @property bool isDragging;
 @property CGPoint startPoint;
@@ -40,4 +40,6 @@ typedef enum {CURVES=0,CANDLES,BARS}Modes;
 +(NSString*) getDateString:(NSDate*)date;
 -(void) drawGrid:(CGContextRef)context;
 -(void) prepare:(int)num;
+-(void)drawBollingerBands:(CGContextRef)context:(int)horShift:(int)vertShift:(int)chartHeight:(double)scaleFactor;
+-(void)drawMA:(CGContextRef)context:(int)horShift:(int)vertShift:(int)chartHeight:(double)scaleFactor;
 @end

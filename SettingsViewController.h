@@ -23,8 +23,12 @@
 @property (weak, nonatomic) IBOutlet UIView *back;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *exchangeSelect;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *chartModeSelect;
+@property (weak, nonatomic) IBOutlet UISwitch *bollingerBands;
+@property (weak, nonatomic) IBOutlet UISwitch *ema;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *periodSelect;
 - (IBAction)exchangeSelectionChanged:(id)sender;
+- (IBAction)bollingerBandsChange:(id)sender;
+- (IBAction)emaChanged:(id)sender;
 -(void)loadSettings;
 -(void)saveSettings;
 @end

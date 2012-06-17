@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface FullChartViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UIView *mainChartCont;
+@property (weak, nonatomic) IBOutlet UIView *analyseChartCont;
 
 @end

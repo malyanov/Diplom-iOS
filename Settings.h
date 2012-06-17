@@ -30,4 +30,8 @@
 +(BOOL)loadSettings;
 +(void)setChanged:(bool)value;
 +(bool)getChanged;
++(bool)getBollingerBands;
++(void)setBollingerBands:(bool)value;
++(bool)getEMA;
++(void)setEMA:(bool)value;
 @end
